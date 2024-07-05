@@ -18,6 +18,11 @@ The app should include the following features:
 
 ---
 
+<h2>Project Screenshots:</h2>
+
+![Product Screenshot](https://i.postimg.cc/jd76PXGf/Simulator-Screenshot-i-Phone-15-Pro-Max-2024-07-05-at-22-34-11.png)
+![Product Screenshot](https://i.postimg.cc/dVc2BCYx/Simulator-Screenshot-i-Phone-15-Pro-Max-2024-07-05-at-22-35-09.png)
+
 ## Part 2: Database Decision-Making
 
 ### Task:

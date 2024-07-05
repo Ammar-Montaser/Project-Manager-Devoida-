@@ -93,7 +93,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           ProjectScreen.route(
                             projects[index],
                             index % 3 == 0
-                                ? Color.fromARGB(255, 62, 214, 77)
+                                ? Color.fromARGB(255, 196, 255, 46)
                                 : index % 3 == 1
                                     ? const Color.fromARGB(255, 69, 231, 252)
                                     : const Color.fromARGB(255, 255, 75, 135),
@@ -101,7 +101,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     },
                     child: Card(
                       color: index % 3 == 0
-                          ? Color.fromARGB(255, 62, 214, 77)
+                          ? Color.fromARGB(255, 196, 255, 46)
                           : index % 3 == 1
                               ? const Color.fromARGB(255, 69, 231, 252)
                               : const Color.fromARGB(255, 255, 75, 135),
