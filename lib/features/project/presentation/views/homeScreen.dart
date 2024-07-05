@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:lottie/lottie.dart';
 import 'package:project_manager/core/app_pallete.dart';
 import 'package:project_manager/features/auth/presentation/cubit/auth_cubit.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -64,7 +65,20 @@ class _HomeScreenState extends State<HomeScreen> {
             projects = state.projects;
             if (projects.length == 0) {
               return Center(
-                child: Text("No Projects Found"),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    LottieBuilder.asset(
+                      "assets/images/emptyAnimation.json",
+                      width: size.width * 0.8,
+                    ),
+                    Text(
+                      "No Projects Found",
+                      style:
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 25),
+                    ),
+                  ],
+                ),
               );
             }
             return Padding(
@@ -78,6 +92,11 @@ class _HomeScreenState extends State<HomeScreen> {
                           context, ProjectScreen.route(projects[index]))
                     },
                     child: Card(
+                      color: index % 3 == 0
+                          ? Colors.amberAccent
+                          : index % 3 == 1
+                              ? Colors.cyan
+                              : Colors.pinkAccent,
                       child: Padding(
                         padding: const EdgeInsets.symmetric(
                             horizontal: 15.0, vertical: 5),
@@ -136,22 +155,31 @@ class _HomeScreenState extends State<HomeScreen> {
                                   style: TextStyle(fontSize: 19),
                                 ),
                               ),
+                              SizedBox(
+                                height: 10,
+                              ),
                               Row(
                                 children: [
                                   Spacer(),
                                   Text(
-                                    projects[index].progress.toString() +
-                                        "% Completed",
+                                    "Progress",
                                     style: Theme.of(context)
                                         .textTheme
                                         .bodySmall!
-                                        .copyWith(
-                                            fontWeight: FontWeight.w600,
-                                            fontSize: 15),
+                                        .copyWith(fontWeight: FontWeight.w600),
                                     textAlign: TextAlign.end,
-                                  )
+                                  ),
+                                  SizedBox(
+                                    width: 10,
+                                  ),
+                                  Text(
+                                    (projects[index].progress * 100)
+                                            .round()
+                                            .toString() +
+                                        "%",
+                                  ),
                                 ],
-                              )
+                              ),
                             ],
                           ),
                         ),

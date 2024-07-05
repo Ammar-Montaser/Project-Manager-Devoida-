@@ -1,3 +1,5 @@
+import 'package:mailer/mailer.dart';
+import 'package:mailer/smtp_server.dart';
 import 'package:project_manager/features/auth/data/models/userModel.dart';
 import 'package:project_manager/features/project/data/models/projectModel.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -8,7 +10,7 @@ abstract interface class ProjectsRemoteDB {
   Future<dynamic> getUsers();
   Future<dynamic> getUser(id);
   Future<dynamic> getTasks(id);
-
+  Future<dynamic> sendEmail(List<dynamic> list);
   Future<dynamic> updateTasks(List<TaskModel> tasks, id);
   Future<dynamic> updateTaskProgress(TaskModel task, id);
   Future<dynamic> createProject(ProjectModel project);
@@ -121,6 +123,16 @@ class ProjectsRemoteDBImpl implements ProjectsRemoteDB {
       tasks.add(task.toJson());
     }
 
+    // count the number of completed tasks
+    int completedTasks = tasks.where((t) => t["status"] == "completed").length;
+
+    // update the project progress field
+    await firestore.collection("projects").doc(id).update({
+      "progress": completedTasks / tasks.length,
+    }).catchError((error) {
+      throw Exception("Error updating project progress: $error");
+    });
+
     // update the tasks list
     return firestore
         .collection("tasks")
@@ -128,5 +140,37 @@ class ProjectsRemoteDBImpl implements ProjectsRemoteDB {
         .update({"tasks": tasks}).catchError((error) {
       throw Exception("Error updating tasks: $error");
     });
+  }
+
+  @override
+  Future sendEmail(List<dynamic> list) async {
+    final smtpServer = gmail(
+      '3am3amywebas@gmail.com',
+      'iydj mesb copz ukxe',
+    );
+    for (String email in list) {
+      final message = Message()
+        ..from = Address('3am3amywebas@gmail.com', 'Ammar Montaser')
+        ..recipients.add(email)
+        ..subject = 'Task Reminder'
+        ..text = '''
+        Hi,
+        You have a task to complete.
+        Please visit the app to see the details.
+        Best regards,
+        Your Name
+      ''';
+
+      try {
+        final sendReport = await send(
+          message,
+          smtpServer,
+        );
+        print('Message sent: ' + sendReport.toString());
+      } catch (e) {
+        print('Message not sent.');
+        print(e);
+      }
+    }
   }
 }

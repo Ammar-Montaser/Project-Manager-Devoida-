@@ -14,6 +14,7 @@ import 'package:project_manager/features/project/domain/usecases/getProjects.dar
 import 'package:project_manager/features/project/domain/usecases/getTasks.dart';
 import 'package:project_manager/features/project/domain/usecases/getUser.dart';
 import 'package:project_manager/features/project/domain/usecases/getUsers.dart';
+import 'package:project_manager/features/project/domain/usecases/sendEmail.dart';
 import 'package:project_manager/features/project/domain/usecases/updateProject.dart';
 import 'package:project_manager/features/project/domain/usecases/updateTaskProgress.dart';
 import 'package:project_manager/features/project/domain/usecases/updateTasks.dart';
@@ -65,6 +66,9 @@ void _initProjects() {
   serviceLocator.registerFactory(() => UpdateTaskProgress(
         projectRepository: serviceLocator(),
       ));
+  serviceLocator.registerFactory(() => SendEmail(
+        projectRepository: serviceLocator(),
+      ));
 
   serviceLocator.registerLazySingleton(() => ProjectCubit(
         serviceLocator(),
@@ -78,22 +82,6 @@ void _initProjects() {
         serviceLocator(),
         serviceLocator(),
         serviceLocator(),
+        serviceLocator(),
       ));
 }
-
-
-
-// void _initBlog() {
-//   serviceLocator
-//     ..registerFactory<BlogRemoteDB>(
-//         () => BlogRemoteDBImpl(supabaseClient: serviceLocator()))
-//     ..registerFactory<BlogLocalDB>(() => BlogLocalDBImpl(box: serviceLocator()))
-//     ..registerFactory<BlogRepository>(() => BlogRepositoryImpl(
-//         blogRemoteDB: serviceLocator(),
-//         blogLocalDB: serviceLocator(),
-//         connectionChecker: serviceLocator()))
-//     ..registerFactory(() => UploadBlog(blogRepository: serviceLocator()))
-//     ..registerFactory(() => getAllBlogs(blogRepository: serviceLocator()))
-//     ..registerLazySingleton(() => BlogBloc(
-//         uploadBlog: serviceLocator(), get_all_blogs: serviceLocator()));
-// }

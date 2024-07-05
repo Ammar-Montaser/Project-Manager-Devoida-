@@ -59,4 +59,9 @@ class ProjectRepositoryImpl implements ProjectRepository {
   Future updateTaskProgress(TaskModel task, id) {
     return projectsRemoteDB.updateTaskProgress(task, id);
   }
+
+  @override
+  Future sendEmail(List<dynamic> list) {
+    return projectsRemoteDB.sendEmail(list);
+  }
 }

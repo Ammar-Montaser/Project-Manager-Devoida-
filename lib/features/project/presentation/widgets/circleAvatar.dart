@@ -16,7 +16,7 @@ class CircAvatar extends StatelessWidget {
         child: Center(
           child: Text(text,
               style: TextStyle(
-                  color: Colors.black,
+                  color: Colors.white,
                   fontWeight: FontWeight.bold,
                   fontSize: 20)),
         ),

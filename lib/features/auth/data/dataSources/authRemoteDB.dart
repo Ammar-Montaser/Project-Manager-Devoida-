@@ -65,7 +65,7 @@ class AuthRemoteDBImpl implements AuthRemoteDB {
       if (firebaseUser != null) {
         _firebaseAuth.currentUser!.updateDisplayName(name);
 
-        firestore.collection('users').doc().set({
+        firestore.collection('users').doc(firebaseUser.uid).set({
           'name': name,
           'email': firebaseUser.email ?? '',
           'id': firebaseUser.uid,
