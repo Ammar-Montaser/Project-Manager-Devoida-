@@ -23,7 +23,6 @@ class ProjectsRemoteDBImpl implements ProjectsRemoteDB {
 
   @override
   Future<dynamic> createProject(ProjectModel project) async {
-    print(project);
     CollectionReference ref =
         await FirebaseFirestore.instance.collection('projects');
 
@@ -40,7 +39,6 @@ class ProjectsRemoteDBImpl implements ProjectsRemoteDB {
   @override
   Future getProjects() {
     return firestore.collection('projects').get().then((value) {
-      print(value.docs);
       List<ProjectModel> projects = [];
       for (var project in value.docs) {
         projects.add(ProjectModel.fromJson(project.data()));
@@ -53,7 +51,6 @@ class ProjectsRemoteDBImpl implements ProjectsRemoteDB {
   Future getTasks(id) {
     return firestore.collection('tasks').doc(id).get().then((value) {
       List<TaskModel> tasks = [];
-      print(value.data());
       //pass index to from json function
       if (value.data() == null) return tasks;
       for (int i = 0; i < value.data()!['tasks'].length; i++) {
@@ -86,10 +83,7 @@ class ProjectsRemoteDBImpl implements ProjectsRemoteDB {
     if (tasks == null || id == null) {
       throw ArgumentError("tasks or id cannot be null");
     }
-    print(firestore
-        .collection("tasks")
-        .doc(id)
-        .set({"tasks": tasks.map((task) => task.toJson()).toList()}));
+
     return firestore
         .collection("tasks")
         .doc(id)

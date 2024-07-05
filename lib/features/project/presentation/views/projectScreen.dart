@@ -15,12 +15,17 @@ import 'package:project_manager/features/project/presentation/widgets/projectsCa
 
 class ProjectScreen extends StatefulWidget {
   final ProjectModel project;
+  final Color color;
   const ProjectScreen({
     super.key,
     required this.project,
+    required this.color,
   });
-  static route(project) =>
-      MaterialPageRoute(builder: (context) => ProjectScreen(project: project));
+  static route(project, color) => MaterialPageRoute(
+      builder: (context) => ProjectScreen(
+            project: project,
+            color: color,
+          ));
 
   @override
   State<ProjectScreen> createState() => _ProjectScreenState();
@@ -45,6 +50,7 @@ class _ProjectScreenState extends State<ProjectScreen> {
 
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: widget.color,
         leading: IconButton(
             onPressed: () {
               Navigator.pushAndRemoveUntil(
@@ -58,25 +64,31 @@ class _ProjectScreenState extends State<ProjectScreen> {
         title: Text(widget.project.name),
         centerTitle: true,
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(15.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              "Description",
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-              textAlign: TextAlign.start,
-            ),
-            Text(widget.project.description),
-            SizedBox(
-              height: 10,
-            ),
-            Row(
-              children: [
-                Column(
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Material(
+            elevation: 2,
+            borderRadius: BorderRadius.only(
+                bottomLeft: Radius.circular(10),
+                bottomRight: Radius.circular(10)),
+            child: Container(
+              width: double.infinity,
+              decoration: BoxDecoration(
+                color: widget.color,
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(15.0),
+                child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    Text(
+                      "Description",
+                      style:
+                          TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                      textAlign: TextAlign.start,
+                    ),
+                    Text(widget.project.description),
                     Text(
                       "Deadline",
                       style:
@@ -86,64 +98,64 @@ class _ProjectScreenState extends State<ProjectScreen> {
                     Text(widget.project.deadline),
                   ],
                 ),
-              ],
+              ),
             ),
-            SizedBox(
-              height: 10,
-            ),
-            BlocConsumer<TasksCubit, TasksState>(
-              listener: (context, state) {},
-              builder: (context, state) {
-                if (state is TasksInitial) {
-                  return Center(
-                    child: CircularProgressIndicator(),
-                  );
-                }
+          ),
+          SizedBox(
+            height: 10,
+          ),
+          BlocConsumer<TasksCubit, TasksState>(
+            listener: (context, state) {},
+            builder: (context, state) {
+              if (state is TasksInitial) {
+                return Center(
+                  child: CircularProgressIndicator(),
+                );
+              }
 
-                if (state is TasksError) {
-                  return Center(
-                    child: Text(state.message),
-                  );
-                }
+              if (state is TasksError) {
+                return Center(
+                  child: Text(state.message),
+                );
+              }
 
-                if (state is TasksLoaded) {
-                  if (state.tasks.isEmpty) {
-                    return Center(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          LottieBuilder.asset(
-                              "assets/images/emptyAnimation.json"),
-                          Text("No Tasks",
-                              style: TextStyle(
-                                  fontSize: 20, fontWeight: FontWeight.bold)),
-                        ],
-                      ),
-                    );
-                  }
-                  tasks = state.tasks;
-                  return Expanded(
-                    child: ListView.builder(
-                      itemCount: state.tasks.length,
-                      itemBuilder: (context, index) {
-                        return ProjectsCard(
-                          state: state,
-                          id: widget.project.id,
-                          index: index,
-                        );
-                      },
+              if (state is TasksLoaded) {
+                if (state.tasks.isEmpty) {
+                  return Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        LottieBuilder.asset(
+                            "assets/images/emptyAnimation.json"),
+                        Text("No Tasks",
+                            style: TextStyle(
+                                fontSize: 20, fontWeight: FontWeight.bold)),
+                      ],
                     ),
                   );
-                } else {
-                  return Container();
                 }
-              },
-            ),
-          ],
-        ),
+                tasks = state.tasks;
+                return Expanded(
+                  child: ListView.builder(
+                    itemCount: state.tasks.length,
+                    itemBuilder: (context, index) {
+                      return ProjectsCard(
+                        state: state,
+                        id: widget.project.id,
+                        index: index,
+                      );
+                    },
+                  ),
+                );
+              } else {
+                return Container();
+              }
+            },
+          ),
+        ],
       ),
       floatingActionButton: FloatingActionButton(
-        backgroundColor: LightTheme.brandingColor.withOpacity(0.6),
+        backgroundColor: widget.color,
         onPressed: () {
           modal();
         },

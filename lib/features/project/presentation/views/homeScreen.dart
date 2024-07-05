@@ -89,14 +89,22 @@ class _HomeScreenState extends State<HomeScreen> {
                   return GestureDetector(
                     onTap: () => {
                       Navigator.push(
-                          context, ProjectScreen.route(projects[index]))
+                          context,
+                          ProjectScreen.route(
+                            projects[index],
+                            index % 3 == 0
+                                ? Color.fromARGB(255, 62, 214, 77)
+                                : index % 3 == 1
+                                    ? const Color.fromARGB(255, 69, 231, 252)
+                                    : const Color.fromARGB(255, 255, 75, 135),
+                          ))
                     },
                     child: Card(
                       color: index % 3 == 0
-                          ? Colors.amberAccent
+                          ? Color.fromARGB(255, 62, 214, 77)
                           : index % 3 == 1
-                              ? Colors.cyan
-                              : Colors.pinkAccent,
+                              ? const Color.fromARGB(255, 69, 231, 252)
+                              : const Color.fromARGB(255, 255, 75, 135),
                       child: Padding(
                         padding: const EdgeInsets.symmetric(
                             horizontal: 15.0, vertical: 5),
