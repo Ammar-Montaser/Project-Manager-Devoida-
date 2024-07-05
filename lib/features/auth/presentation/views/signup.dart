@@ -1,19 +1,19 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lottie/lottie.dart';
 import 'package:project_manager/features/auth/presentation/cubit/auth_cubit.dart';
-import 'package:project_manager/features/auth/presentation/views/signup.dart';
+import 'package:project_manager/features/auth/presentation/views/login.dart';
 import 'package:project_manager/features/auth/presentation/widgets/authField.dart';
-import 'package:project_manager/features/project/presentation/views/homeScreen.dart';
 
-class loginScreen extends StatelessWidget {
-  loginScreen({super.key});
-  static route() => MaterialPageRoute(builder: (context) => loginScreen());
+class SignUp extends StatelessWidget {
+  SignUp({super.key});
+  static route() => MaterialPageRoute(builder: (context) => SignUp());
   final formKey = GlobalKey<FormState>();
   final emailController = TextEditingController();
+  final nameController = TextEditingController();
   final passwordController = TextEditingController();
+  final confirmPasswordController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -35,36 +35,33 @@ class loginScreen extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Expanded(
-                  flex: 8,
+                  flex: 3,
                   child: Container(
                     width: double.infinity,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
-                        Padding(
-                          padding: const EdgeInsets.only(top: 20.0),
-                          child: SizedBox(
-                            height: size.height * 0.3,
-                            child: OverflowBox(
-                              minHeight: size.height * 0.3,
-                              maxHeight: size.height * 0.4,
-                              child: LottieBuilder.asset(
-                                "assets/images/loginAnimation.json",
-                                repeat: false,
-                              ),
+                        SizedBox(
+                          height: size.height * 0.2,
+                          child: OverflowBox(
+                            minHeight: size.height * 0.2,
+                            maxHeight: size.height * 0.3,
+                            child: LottieBuilder.asset(
+                              "assets/images/signUpAnimation.json",
+                              repeat: true,
                             ),
                           ),
                         ),
                         Text(
-                          "Login",
+                          "Sign Up",
                           style: Theme.of(context).textTheme.headlineLarge!,
                         ),
                         SizedBox(
                           height: 10,
                         ),
                         Text(
-                          "Please sign in to continue...",
+                          "Please sign up to continue...",
                           style: Theme.of(context)
                               .textTheme
                               .bodyMedium!
@@ -82,6 +79,14 @@ class loginScreen extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           authField(
+                            hintText: "Enter your name",
+                            labelText: "Name",
+                            prefixIcon: Icon(Icons.person),
+                            controller: nameController,
+                            isObscureText: false,
+                            isPassword: false,
+                          ),
+                          authField(
                             hintText: "Enter your email",
                             labelText: "Email",
                             prefixIcon: Icon(Icons.email),
@@ -97,26 +102,34 @@ class loginScreen extends StatelessWidget {
                             isObscureText: true,
                             isPassword: true,
                           ),
+                          authField(
+                            hintText: "Confirm your password",
+                            labelText: "Confirm Password",
+                            prefixIcon: Icon(Icons.password),
+                            controller: confirmPasswordController,
+                            isObscureText: true,
+                            isPassword: true,
+                          ),
                           SizedBox(
                             height: 10,
                           ),
                           BlocConsumer<AuthCubit, AuthState>(
                             listener: (context, state) {
-                              if (state is AuthSuccess) {
-                                Navigator.pushAndRemoveUntil(context,
-                                    HomeScreen.route(), (route) => false);
-                              }
+                              // TODO: implement listener
                             },
                             builder: (context, state) {
                               return TextButton(
                                 onPressed: () {
                                   if (formKey.currentState!.validate()) {
-                                    context.read<AuthCubit>().login(
-                                        emailController.text,
-                                        passwordController.text);
+                                    BlocProvider.of<AuthCubit>(context)
+                                        .register(
+                                      emailController.text,
+                                      passwordController.text,
+                                      nameController.text,
+                                    );
                                   }
                                 },
-                                child: Text("Login"),
+                                child: Text("Sign Up"),
                                 style: Theme.of(context)
                                     .elevatedButtonTheme
                                     .style!
@@ -131,9 +144,9 @@ class loginScreen extends StatelessWidget {
                               Spacer(),
                               TextButton(
                                   onPressed: () {
-                                    Navigator.push(context, SignUp.route());
+                                    Navigator.pop(context, loginScreen.route());
                                   },
-                                  child: Text("Don't have an account?"))
+                                  child: Text("Already have an account?")),
                             ],
                           ),
                         ],
